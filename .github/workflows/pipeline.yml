@@ -1,13 +1,12 @@
 name: Pokedex
+# hello this is my comment
 
 on:
     push:
-        branches:
-            - master
+        branches: [master]
     pull_request:
-        branches:
-            - master
-        types: [opened, synchronize,]
+        branches: [master]
+        types: [opened, synchronize]
 
 jobs:
     simple_deployment_pipeline:
@@ -17,10 +16,10 @@ jobs:
             - uses: actions/setup-node@v2
               with:
                   node-version: '16'
-            - name: Install dependencies
+            - name: install dependencies
               run: npm install
             - name: Code linting (with fix)
-              run : npm run eslint -- --fix
+              run: npm run eslint -- --fix
             - name: Build
               run: npm run build
             - name: Run Tests
@@ -29,7 +28,9 @@ jobs:
         needs: [simple_deployment_pipeline]
         runs-on: ubuntu-20.04
         steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
             - name: Bump version and push tag
               uses: anothrNick/github-tag-action@1.67.0
               env:
-                        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
